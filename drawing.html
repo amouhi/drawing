@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0.5rem;
+
+        }
+        #weight {
+            width: 3rem;
+            text-align: center;
+        }
+        
+
+    </style>  
+    <title>Paint App</title>
+</head>
+<body>
+    <div class="container" >
+        <h1>Drawing App</h1>
+        <p>Press the mouse button to start drawing</p>
+        <input id='color' type="color"  value="black">
+        <input id="weight" type="number" value="3"/>
+        <button id="erase">Erase</button>      
+    </div>
+    <script>
+        let drawing = false;
+
+        const width = '80%'
+        const height = 600
+        const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr('left', 'container')
+            .attr("style", "outline: thin solid black; margin: 20px")
+            .on('mousemove', draw_point);
+
+        function draw_point(){
+            if (!drawing) 
+                return;
+
+            const coords = d3.mouse(this);
+            const color = document.querySelector('#color').value;
+            const weight = document.querySelector('#weight').value;
+            svg.append('circle')
+                .attr('cx', coords[0])
+                .attr('cy', coords[1])
+                .attr('r', weight)
+                .style('fill', color)
+        }
+
+        
+
+        svg.on('mousedown', ()=> {
+            drawing = true;
+        });
+
+        svg.on('mouseup', ()=> {
+            drawing = false;
+        });
+
+        d3.select('#erase')
+            .on('click', ()=> {
+                svg.selectAll('*').remove();
+            })
+    </script>
+</body>
+</html>
